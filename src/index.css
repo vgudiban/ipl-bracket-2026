@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+}
+
+.team-card {
+  @apply p-3 rounded-lg cursor-pointer transition-all duration-200 border-2;
+}
+
+.team-card:hover {
+  @apply scale-105;
+}
+
+.team-card.selected {
+  @apply border-yellow-400 bg-yellow-400/20;
+}
+
+.team-card.winner {
+  @apply border-green-500 bg-green-500/20;
+}
+
+.team-card.loser {
+  @apply opacity-50;
+}

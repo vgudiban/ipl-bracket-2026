@@ -1,0 +1,129 @@
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, get, onValue, update } from 'firebase/database';
+
+// Firebase configuration - Replace with your actual config
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "your-app.firebaseapp.com",
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://your-app-default-rtdb.firebaseio.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project-id",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "your-app.appspot.com",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abc123"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// User functions
+export const createUser = async (name, pin) => {
+  const userRef = ref(db, `users/${name}`);
+  const snapshot = await get(userRef);
+  if (snapshot.exists()) {
+    throw new Error('User already exists');
+  }
+  await set(userRef, { pin, points: 0, createdAt: Date.now() });
+  return { name, points: 0 };
+};
+
+export const loginUser = async (name, pin) => {
+  const userRef = ref(db, `users/${name}`);
+  const snapshot = await get(userRef);
+  if (!snapshot.exists()) {
+    throw new Error('User not found');
+  }
+  const userData = snapshot.val();
+  if (userData.pin !== pin) {
+    throw new Error('Invalid PIN');
+  }
+  return { name, points: userData.points || 0 };
+};
+
+// Prediction functions
+export const savePrediction = async (userName, matchId, winner) => {
+  const predRef = ref(db, `predictions/${userName}/${matchId}`);
+  await set(predRef, { winner, timestamp: Date.now() });
+};
+
+export const getUserPredictions = async (userName) => {
+  const predRef = ref(db, `predictions/${userName}`);
+  const snapshot = await get(predRef);
+  return snapshot.exists() ? snapshot.val() : {};
+};
+
+export const getAllPredictions = async () => {
+  const predRef = ref(db, 'predictions');
+  const snapshot = await get(predRef);
+  return snapshot.exists() ? snapshot.val() : {};
+};
+
+// Match functions
+export const getMatches = async () => {
+  const matchRef = ref(db, 'matches');
+  const snapshot = await get(matchRef);
+  return snapshot.exists() ? snapshot.val() : {};
+};
+
+export const seedMatches = async (matches) => {
+  const matchRef = ref(db, 'matches');
+  await set(matchRef, matches);
+};
+
+export const setMatchResult = async (matchId, winner) => {
+  const matchRef = ref(db, `matches/${matchId}`);
+  await update(matchRef, { result: winner });
+};
+
+// Settings functions
+export const getSettings = async () => {
+  const settingsRef = ref(db, 'settings');
+  const snapshot = await get(settingsRef);
+  return snapshot.exists() ? snapshot.val() : { leagueLocked: false };
+};
+
+export const updateSettings = async (settings) => {
+  const settingsRef = ref(db, 'settings');
+  await update(settingsRef, settings);
+};
+
+// Leaderboard
+export const getLeaderboard = async () => {
+  const usersRef = ref(db, 'users');
+  const snapshot = await get(usersRef);
+  if (!snapshot.exists()) return [];
+
+  const users = snapshot.val();
+  return Object.entries(users)
+    .map(([name, data]) => ({ name, points: data.points || 0 }))
+    .sort((a, b) => b.points - a.points);
+};
+
+export const updateUserPoints = async (userName, points) => {
+  const userRef = ref(db, `users/${userName}/points`);
+  await set(userRef, points);
+};
+
+// Real-time listeners
+export const subscribeToMatches = (callback) => {
+  const matchRef = ref(db, 'matches');
+  return onValue(matchRef, (snapshot) => {
+    callback(snapshot.exists() ? snapshot.val() : {});
+  });
+};
+
+export const subscribeToLeaderboard = (callback) => {
+  const usersRef = ref(db, 'users');
+  return onValue(usersRef, (snapshot) => {
+    if (!snapshot.exists()) {
+      callback([]);
+      return;
+    }
+    const users = snapshot.val();
+    const leaderboard = Object.entries(users)
+      .map(([name, data]) => ({ name, points: data.points || 0 }))
+      .sort((a, b) => b.points - a.points);
+    callback(leaderboard);
+  });
+};
+
+export { db, ref, get, set, update, onValue };
