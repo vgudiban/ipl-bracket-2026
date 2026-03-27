@@ -83,6 +83,9 @@ const Predictions = ({ user }) => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="mb-4 p-3 bg-blue-500/20 border border-blue-500/50 text-blue-300 rounded-lg text-sm text-center">
+        🏏 IPL 2026 starts tomorrow! Get your predictions in before matches begin.
+      </div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-2">Make Your Predictions</h1>
         <div className="flex items-center justify-between">
