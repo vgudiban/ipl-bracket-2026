@@ -41,9 +41,9 @@ const MatchCard = ({ match, matchId, prediction, onPredict, locked, showResult }
   };
 
   const getPointValue = () => {
-    if (stage === 'final') return 3;
-    if (stage === 'playoff') return 2;
-    return 1;
+    if (stage === 'final') return 6;
+    if (stage === 'playoff') return 4;
+    return 2;
   };
 
   const isCorrect = result && prediction === result;

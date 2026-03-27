@@ -142,9 +142,9 @@ const Predictions = ({ user }) => {
       <div className="mt-8 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
         <h3 className="font-semibold mb-2">Scoring Rules</h3>
         <ul className="text-sm text-gray-400 space-y-1">
-          <li>• League match: <span className="text-yellow-400">+1 point</span></li>
-          <li>• Playoff match: <span className="text-yellow-400">+2 points</span></li>
-          <li>• Final: <span className="text-yellow-400">+3 points</span></li>
+          <li>• League match: <span className="text-yellow-400">+2 points</span></li>
+          <li>• Playoff match: <span className="text-yellow-400">+4 points</span></li>
+          <li>• Final: <span className="text-yellow-400">+6 points</span></li>
         </ul>
       </div>
     </div>

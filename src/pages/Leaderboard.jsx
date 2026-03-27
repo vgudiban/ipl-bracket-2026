@@ -72,9 +72,9 @@ const Leaderboard = () => {
       <div className="mt-8 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
         <h3 className="font-semibold mb-2">How Points Work</h3>
         <ul className="text-sm text-gray-400 space-y-1">
-          <li>• Correctly predict a league match: <span className="text-yellow-400">+1</span></li>
-          <li>• Correctly predict a playoff match: <span className="text-yellow-400">+2</span></li>
-          <li>• Correctly predict the final: <span className="text-yellow-400">+3</span></li>
+          <li>• Correctly predict a league match: <span className="text-yellow-400">+2</span></li>
+          <li>• Correctly predict a playoff match: <span className="text-yellow-400">+4</span></li>
+          <li>• Correctly predict the final: <span className="text-yellow-400">+6</span></li>
         </ul>
         <p className="text-xs text-gray-500 mt-3">
           Points are updated when match results are entered by the admin.
