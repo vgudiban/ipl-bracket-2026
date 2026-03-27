@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Predictions from './pages/Predictions';
 import Leaderboard from './pages/Leaderboard';
@@ -24,7 +24,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter basename="/ipl-bracket-2026">
+    <HashRouter>
       <div className="min-h-screen text-white">
         {user && <Navbar user={user} onLogout={handleLogout} />}
         <Routes>
@@ -46,7 +46,7 @@ function App() {
           />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
