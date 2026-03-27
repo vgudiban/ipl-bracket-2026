@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, get, onValue, update } from 'firebase/database';
 
-// Firebase configuration - Replace with your actual config
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "your-app.firebaseapp.com",
-  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://your-app-default-rtdb.firebaseio.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project-id",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "your-app.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abc123"
+  apiKey: "AIzaSyD8PetzlhLkb7exO_io1t5z52WSlVEIfhQ",
+  authDomain: "ipl-bracket.firebaseapp.com",
+  databaseURL: "https://ipl-bracket-default-rtdb.firebaseio.com",
+  projectId: "ipl-bracket",
+  storageBucket: "ipl-bracket.firebasestorage.app",
+  messagingSenderId: "761543128271",
+  appId: "1:761543128271:web:e1d488856220cc60ef33ba"
 };
 
 const app = initializeApp(firebaseConfig);
