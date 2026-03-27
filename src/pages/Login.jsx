@@ -27,10 +27,11 @@ const Login = ({ onLogin }) => {
 
     try {
       let userData;
+      const normalizedName = name.trim().toLowerCase();
       if (isNewUser) {
-        userData = await createUser(name.trim(), pin);
+        userData = await createUser(normalizedName, pin);
       } else {
-        userData = await loginUser(name.trim(), pin);
+        userData = await loginUser(normalizedName, pin);
       }
       onLogin(userData);
     } catch (err) {
