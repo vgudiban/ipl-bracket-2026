@@ -7,6 +7,16 @@
     <meta name="theme-color" content="#1a1a2e" />
     <meta name="description" content="IPL 2026 Bracket Prediction Game - Predict match winners and compete with friends!" />
     <title>IPL 2026 Bracket Game</title>
+    <script>
+      // Handle redirect from 404.html for GitHub Pages SPA routing
+      (function() {
+        var redirect = sessionStorage.getItem('redirect');
+        if (redirect) {
+          sessionStorage.removeItem('redirect');
+          window.history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
