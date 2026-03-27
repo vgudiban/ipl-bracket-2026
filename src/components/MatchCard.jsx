@@ -28,7 +28,8 @@ const teamNames = {
 
 const MatchCard = ({ match, matchId, prediction, onPredict, locked, showResult }) => {
   const { team1, team2, date, time, stage, result, venue, matchType } = match;
-  const matchDate = new Date(date + 'T' + time);
+  // Match times are in IST (UTC+5:30)
+  const matchDate = new Date(date + 'T' + time + '+05:30');
   const isPast = new Date() > matchDate;
   const isLocked = locked || isPast || result;
 
