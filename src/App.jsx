@@ -38,7 +38,7 @@ function App() {
           />
           <Route
             path="/leaderboard"
-            element={user ? <Leaderboard /> : <Navigate to="/" />}
+            element={<Leaderboard />}
           />
           <Route
             path="/admin"

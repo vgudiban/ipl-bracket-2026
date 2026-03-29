@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { subscribeToLeaderboard } from '../firebase';
 
 const Leaderboard = () => {
@@ -38,7 +39,15 @@ const Leaderboard = () => {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Leaderboard</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Leaderboard</h1>
+        <Link
+          to="/"
+          className="text-sm px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-black font-medium rounded-lg transition-colors"
+        >
+          Join Game
+        </Link>
+      </div>Leaderboard</h1>
 
       {leaderboard.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
