@@ -47,7 +47,7 @@ const Leaderboard = () => {
         >
           Join Game
         </Link>
-      </div>Leaderboard</h1>
+      </div>
 
       {leaderboard.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
