@@ -56,7 +56,13 @@ const Leaderboard = () => {
       ) : (
         <div className="space-y-3">
           {leaderboard.map((player, index) => {
-            const rank = index + 1;
+            // Calculate rank with ties - players with same points get same rank
+            let rank = 1;
+            for (let i = 0; i < index; i++) {
+              if (leaderboard[i].points > player.points) {
+                rank = i + 2;
+              }
+            }
             return (
               <div
                 key={player.name}
