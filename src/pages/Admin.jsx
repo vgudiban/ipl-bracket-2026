@@ -272,6 +272,15 @@ const Admin = () => {
             >
               Fix Duplicate Users
             </button>
+            <button
+              onClick={async () => {
+                const raw = await getAllPredictions();
+                setMessage('RAW: ' + JSON.stringify(raw, null, 2));
+              }}
+              className="px-4 py-2 bg-gray-500 hover:bg-gray-400 text-white rounded-lg font-medium transition-colors"
+            >
+              Debug Predictions
+            </button>
           </div>
 
           <h2 className="text-xl font-semibold mb-4">Set Match Results</h2>
