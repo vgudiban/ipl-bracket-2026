@@ -97,7 +97,7 @@ const MatchCard = ({ match, matchId, prediction, onPredict, locked, showResult }
         <div className={`mt-2 text-center text-sm font-medium ${
           isCorrect ? 'text-green-400' : isWrong ? 'text-red-400' : 'text-gray-400'
         }`}>
-          {isCorrect ? '✓ Correct!' : isWrong ? '✗ Wrong' : `Winner: ${result}`}
+          {isCorrect ? '✓ Correct!' : isWrong ? `✗ Wrong (you picked ${prediction})` : `Winner: ${result}`}
         </div>
       )}
 

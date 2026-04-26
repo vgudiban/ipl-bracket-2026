@@ -10,6 +10,7 @@ const Predictions = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [saving, setSaving] = useState(null);
+  const [saveError, setSaveError] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -40,6 +41,7 @@ const Predictions = ({ user }) => {
 
   const handlePredict = async (matchId, winner) => {
     setSaving(matchId);
+    setSaveError(null);
     try {
       await savePrediction(user.name, matchId, winner);
       setPredictions((prev) => ({
@@ -48,6 +50,7 @@ const Predictions = ({ user }) => {
       }));
     } catch (err) {
       console.error('Error saving prediction:', err);
+      setSaveError('Failed to save prediction. Please try again.');
     } finally {
       setSaving(null);
     }
@@ -123,6 +126,11 @@ const Predictions = ({ user }) => {
       </div>
 
       <div className="space-y-4">
+        {saveError && (
+          <div className="p-3 bg-red-500/20 border border-red-500/50 text-red-400 rounded-lg text-sm text-center">
+            {saveError}
+          </div>
+        )}
         {filteredMatches.map(([matchId, match]) => (
           <MatchCard
             key={matchId}
