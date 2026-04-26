@@ -182,7 +182,7 @@ const Admin = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Admin Panel</h1>
+        <h1 className="text-2xl font-bold">Admin Panel <span className="text-xs text-yellow-400">v2</span></h1>
         <div className="flex gap-2">
           <button
             onClick={loadData}
