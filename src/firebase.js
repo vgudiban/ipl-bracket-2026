@@ -29,26 +29,40 @@ export const createUser = async (name, pin) => {
 export const loginUser = async (name, pin) => {
   const userRef = ref(db, `users/${name}`);
   let snapshot = await get(userRef);
+  let originalKey = name;
 
-  // Fallback: accounts created before lowercase normalization may be stored under a different case
   if (!snapshot.exists()) {
     const allSnap = await get(ref(db, 'users'));
     if (allSnap.exists()) {
       const all = allSnap.val();
       const matchedKey = Object.keys(all).find(k => k.toLowerCase() === name);
       if (matchedKey) {
+        originalKey = matchedKey;
         snapshot = { exists: () => true, val: () => all[matchedKey] };
       }
     }
   }
 
-  if (!snapshot.exists()) {
-    throw new Error('User not found');
-  }
+  if (!snapshot.exists()) throw new Error('User not found');
   const userData = snapshot.val();
-  if (userData.pin !== pin) {
-    throw new Error('Invalid PIN');
+  if (userData.pin !== pin) throw new Error('Invalid PIN');
+
+  // Auto-migrate mixed-case account to lowercase on login
+  if (originalKey !== name) {
+    await set(ref(db, `users/${name}`), userData);
+    await set(ref(db, `users/${originalKey}`), null);
+    const oldPredsSnap = await get(ref(db, `predictions/${originalKey}`));
+    if (oldPredsSnap.exists()) {
+      for (const [matchId, pred] of Object.entries(oldPredsSnap.val())) {
+        const existSnap = await get(ref(db, `predictions/${name}/${matchId}`));
+        if (!existSnap.exists()) {
+          await set(ref(db, `predictions/${name}/${matchId}`), pred);
+        }
+      }
+      await set(ref(db, `predictions/${originalKey}`), null);
+    }
   }
+
   return { name, points: userData.points || 0 };
 };
 
@@ -67,7 +81,22 @@ export const getUserPredictions = async (userName) => {
 export const getAllPredictions = async () => {
   const predRef = ref(db, 'predictions');
   const snapshot = await get(predRef);
-  return snapshot.exists() ? snapshot.val() : {};
+  if (!snapshot.exists()) return {};
+
+  // Normalize all keys to lowercase and merge duplicates, keeping the latest prediction per match
+  const raw = snapshot.val();
+  const merged = {};
+  for (const [key, matches] of Object.entries(raw)) {
+    const lcKey = key.toLowerCase();
+    if (!merged[lcKey]) merged[lcKey] = {};
+    for (const [matchId, pred] of Object.entries(matches || {})) {
+      const existing = merged[lcKey][matchId];
+      if (!existing || (pred?.timestamp || 0) > (existing?.timestamp || 0)) {
+        merged[lcKey][matchId] = pred;
+      }
+    }
+  }
+  return merged;
 };
 
 // Match functions
@@ -112,8 +141,10 @@ export const getLeaderboard = async () => {
 };
 
 export const updateUserPoints = async (userName, points) => {
-  const userRef = ref(db, `users/${userName}/points`);
-  await set(userRef, points);
+  const allSnap = await get(ref(db, 'users'));
+  if (!allSnap.exists()) return;
+  const actualKey = Object.keys(allSnap.val()).find(k => k.toLowerCase() === userName.toLowerCase()) || userName;
+  await set(ref(db, `users/${actualKey}/points`), points);
 };
 
 // One-time migration: move mixed-case user/prediction keys to lowercase
