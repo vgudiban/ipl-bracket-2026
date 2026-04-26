@@ -183,12 +183,20 @@ const Admin = () => {
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Admin Panel</h1>
-        <button
-          onClick={() => setAuthenticated(false)}
-          className="text-sm px-3 py-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30"
-        >
-          Logout
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={loadData}
+            className="text-sm px-3 py-1 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30"
+          >
+            Refresh
+          </button>
+          <button
+            onClick={() => setAuthenticated(false)}
+            className="text-sm px-3 py-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {message && (
