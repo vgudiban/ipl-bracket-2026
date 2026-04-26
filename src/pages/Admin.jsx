@@ -214,7 +214,7 @@ const Admin = () => {
         ].map(({ key, label }) => (
           <button
             key={key}
-            onClick={() => setActiveTab(key)}
+            onClick={() => { setActiveTab(key); if (key === 'predictions') loadData(); }}
             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
               activeTab === key
                 ? 'bg-yellow-500 text-black'
