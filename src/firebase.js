@@ -116,6 +116,49 @@ export const updateUserPoints = async (userName, points) => {
   await set(userRef, points);
 };
 
+// One-time migration: move mixed-case user/prediction keys to lowercase
+export const migrateToLowercase = async () => {
+  const [usersSnap, predsSnap] = await Promise.all([
+    get(ref(db, 'users')),
+    get(ref(db, 'predictions')),
+  ]);
+
+  const migrated = [];
+
+  if (usersSnap.exists()) {
+    const users = usersSnap.val();
+    for (const [key, data] of Object.entries(users)) {
+      if (key !== key.toLowerCase()) {
+        const lcKey = key.toLowerCase();
+        if (!users[lcKey]) {
+          await set(ref(db, `users/${lcKey}`), data);
+        }
+        await set(ref(db, `users/${key}`), null);
+        migrated.push(`users/${key} → ${lcKey}`);
+      }
+    }
+  }
+
+  if (predsSnap.exists()) {
+    const preds = predsSnap.val();
+    for (const [key, userPreds] of Object.entries(preds)) {
+      if (key !== key.toLowerCase()) {
+        const lcKey = key.toLowerCase();
+        for (const [matchId, pred] of Object.entries(userPreds || {})) {
+          const existingSnap = await get(ref(db, `predictions/${lcKey}/${matchId}`));
+          if (!existingSnap.exists()) {
+            await set(ref(db, `predictions/${lcKey}/${matchId}`), pred);
+          }
+        }
+        await set(ref(db, `predictions/${key}`), null);
+        migrated.push(`predictions/${key} → ${lcKey}`);
+      }
+    }
+  }
+
+  return migrated;
+};
+
 // Real-time listeners
 export const subscribeToMatches = (callback) => {
   const matchRef = ref(db, 'matches');

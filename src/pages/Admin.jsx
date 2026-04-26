@@ -7,7 +7,8 @@ import {
   updateUserPoints,
   getSettings,
   updateSettings,
-  getLeaderboard
+  getLeaderboard,
+  migrateToLowercase,
 } from '../firebase';
 import matchData from '../data/matches.json';
 
@@ -244,12 +245,24 @@ const Admin = () => {
       {/* Results Tab */}
       {activeTab === 'results' && (
         <>
-          <div className="mb-4">
+          <div className="mb-4 flex gap-2 flex-wrap">
             <button
               onClick={recalculatePoints}
               className="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-lg font-medium transition-colors"
             >
               Recalculate All Points
+            </button>
+            <button
+              onClick={async () => {
+                const result = await migrateToLowercase();
+                await loadData();
+                setMessage(result.length
+                  ? `Migrated: ${result.join(', ')}`
+                  : 'Nothing to migrate — all keys already lowercase');
+              }}
+              className="px-4 py-2 bg-purple-500 hover:bg-purple-400 text-white rounded-lg font-medium transition-colors"
+            >
+              Fix Duplicate Users
             </button>
           </div>
 
