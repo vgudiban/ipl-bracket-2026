@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   getMatches,
+  seedMatches,
   setMatchResult,
   getAllPredictions,
   updateUserPoints,
@@ -8,6 +9,7 @@ import {
   updateSettings,
   getLeaderboard
 } from '../firebase';
+import matchData from '../data/matches.json';
 
 const ADMIN_PIN = '1234'; // Change this to your preferred admin PIN
 
@@ -32,18 +34,23 @@ const Admin = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [matchesData, predictionsData, settingsData, leaderboardData] = await Promise.all([
-        getMatches(),
+      let matchesData = await getMatches();
+      if (!matchesData || Object.keys(matchesData).length === 0) {
+        await seedMatches(matchData);
+        matchesData = matchData;
+      }
+      const [predictionsData, settingsData, leaderboardData] = await Promise.all([
         getAllPredictions(),
         getSettings(),
         getLeaderboard(),
       ]);
-      setMatches(matchesData || {});
+      setMatches(matchesData);
       setPredictions(predictionsData || {});
       setSettings(settingsData || { leagueLocked: false });
       setLeaderboard(leaderboardData || []);
     } catch (err) {
       console.error('Error loading admin data:', err);
+      setMessage('Error loading data: ' + err.message);
     } finally {
       setLoading(false);
     }

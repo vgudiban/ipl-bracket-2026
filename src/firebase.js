@@ -28,7 +28,20 @@ export const createUser = async (name, pin) => {
 
 export const loginUser = async (name, pin) => {
   const userRef = ref(db, `users/${name}`);
-  const snapshot = await get(userRef);
+  let snapshot = await get(userRef);
+
+  // Fallback: accounts created before lowercase normalization may be stored under a different case
+  if (!snapshot.exists()) {
+    const allSnap = await get(ref(db, 'users'));
+    if (allSnap.exists()) {
+      const all = allSnap.val();
+      const matchedKey = Object.keys(all).find(k => k.toLowerCase() === name);
+      if (matchedKey) {
+        snapshot = { exists: () => true, val: () => all[matchedKey] };
+      }
+    }
+  }
+
   if (!snapshot.exists()) {
     throw new Error('User not found');
   }
