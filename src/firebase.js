@@ -116,6 +116,11 @@ export const setMatchResult = async (matchId, winner) => {
   await update(matchRef, { result: winner });
 };
 
+export const updateMatch = async (matchId, fields) => {
+  const matchRef = ref(db, `matches/${matchId}`);
+  await update(matchRef, fields);
+};
+
 // Settings functions
 export const getSettings = async () => {
   const settingsRef = ref(db, 'settings');

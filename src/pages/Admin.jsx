@@ -3,6 +3,7 @@ import {
   getMatches,
   seedMatches,
   setMatchResult,
+  updateMatch,
   getAllPredictions,
   updateUserPoints,
   getSettings,
@@ -259,6 +260,19 @@ const Admin = () => {
               className="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-lg font-medium transition-colors"
             >
               Recalculate All Points
+            </button>
+            <button
+              onClick={async () => {
+                const playoffKeys = ['qualifier_1', 'eliminator', 'qualifier_2', 'final'];
+                for (const key of playoffKeys) {
+                  if (matchData[key]) await updateMatch(key, matchData[key]);
+                }
+                await loadData();
+                setMessage('Playoff matches synced from JSON');
+              }}
+              className="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-black rounded-lg font-medium transition-colors"
+            >
+              Sync Playoff Matches
             </button>
             <button
               onClick={async () => {
