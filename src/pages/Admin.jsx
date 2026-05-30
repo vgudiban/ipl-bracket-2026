@@ -265,7 +265,10 @@ const Admin = () => {
               onClick={async () => {
                 const playoffKeys = ['qualifier_1', 'eliminator', 'qualifier_2', 'final'];
                 for (const key of playoffKeys) {
-                  if (matchData[key]) await updateMatch(key, matchData[key]);
+                  if (matchData[key]) {
+                    const { result, ...scheduleFields } = matchData[key];
+                    await updateMatch(key, scheduleFields);
+                  }
                 }
                 await loadData();
                 setMessage('Playoff matches synced from JSON');
