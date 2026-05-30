@@ -72,5 +72,5 @@
   "qualifier_1": { "team1": "RCB", "team2": "GT", "date": "2026-05-26", "time": "20:30", "stage": "playoff", "result": null, "venue": "Dharamsala", "matchType": "Qualifier 1" },
   "eliminator": { "team1": "RR", "team2": "SRH", "date": "2026-05-27", "time": "20:30", "stage": "playoff", "result": null, "venue": "New Chandigarh", "matchType": "Eliminator" },
   "qualifier_2": { "team1": "GT", "team2": "RR", "date": "2026-05-29", "time": "20:30", "stage": "playoff", "result": null, "venue": "New Chandigarh", "matchType": "Qualifier 2" },
-  "final": { "team1": "TBD", "team2": "TBD", "date": "2026-05-31", "time": "19:30", "stage": "final", "result": null, "venue": "TBD", "matchType": "Final" }
+  "final": { "team1": "GT", "team2": "RCB", "date": "2026-05-31", "time": "20:30", "stage": "final", "result": null, "venue": "Ahmedabad", "matchType": "Final" }
 }
